@@ -97,14 +97,11 @@ internal class NettyHttp1ApplicationResponse(call: NettyApplicationCall,
         job.invokeOnCompletion {
             upgradedWriteChannel.close()
             bodyHandler.close()
-            println("Done [${GMTDate()}]")
         }
 
         (call as NettyApplicationCall).responseWriteJob.join()
 
-        println("Closing [${GMTDate()}]")
         context.channel().close()
-        println("Context channel closed!")
     }
 
     private fun setChunked(message: HttpResponse) {

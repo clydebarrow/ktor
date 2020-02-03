@@ -18,6 +18,7 @@ import io.ktor.util.date.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
+import org.apache.tomcat.jni.File.*
 import org.junit.*
 import org.junit.Test
 import org.junit.rules.*
@@ -190,6 +191,7 @@ abstract class WebSocketEngineSuite<TEngine : ApplicationEngine, TConfiguration 
                 for (i in 1..count) {
                     send(Frame.Text(template.substring(0, i)))
                 }
+                close()
             }
         }
 
@@ -204,13 +206,12 @@ abstract class WebSocketEngineSuite<TEngine : ApplicationEngine, TConfiguration 
                 }
             }
 
-            outputStream.apply {
-                // close frame with code 1000
-                writeHex("0x88 0x02 0x03 0xe8")
-                flush()
-            }
+//            outputStream.apply {
+//                // close frame with code 1000
+//                writeHex("0x88 0x02 0x03 0xe8")
+//                flush()
+//            }
 
-            Thread.sleep(10_000)
             println("Assert close frame [${GMTDate()}], isInputShutdown = $isInputShutdown, isOutputShutdown = $isOutputShutdown")
             assertCloseFrame()
         }
