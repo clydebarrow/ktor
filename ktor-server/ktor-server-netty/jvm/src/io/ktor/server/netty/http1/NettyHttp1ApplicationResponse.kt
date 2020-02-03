@@ -9,6 +9,7 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.server.netty.*
 import io.ktor.server.netty.cio.*
+import io.ktor.util.date.*
 import io.netty.buffer.*
 import io.netty.channel.*
 import io.netty.handler.codec.http.*
@@ -96,11 +97,14 @@ internal class NettyHttp1ApplicationResponse(call: NettyApplicationCall,
         job.invokeOnCompletion {
             upgradedWriteChannel.close()
             bodyHandler.close()
+            println("Done [${GMTDate()}]")
         }
 
         (call as NettyApplicationCall).responseWriteJob.join()
 
+        println("Closing [${GMTDate()}]")
         context.channel().close()
+        println("Context channel closed!")
     }
 
     private fun setChunked(message: HttpResponse) {

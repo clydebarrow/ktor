@@ -14,6 +14,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.testing.*
 import io.ktor.util.*
+import io.ktor.util.date.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
@@ -209,6 +210,8 @@ abstract class WebSocketEngineSuite<TEngine : ApplicationEngine, TConfiguration 
                 flush()
             }
 
+            Thread.sleep(10_000)
+            println("Assert close frame [${GMTDate()}], isInputShutdown = $isInputShutdown, isOutputShutdown = $isOutputShutdown")
             assertCloseFrame()
         }
     }
